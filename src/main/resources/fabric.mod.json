@@ -1,31 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "prettyhitbox_createaddition",
+  "id": "prettyhitboxes_createaddition",
   "version": "${version}",
-  "name": "Pretty Hitbox-Create Addition",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Pretty Hitboxes-Create Addition",
+  "description": "Customizable hitbox",
   "authors": [
-    "yu"
+    "yu",
+    "ErrorGamer2000"
   ],
   "contact": {
-    "sources": "https://github.com/Fabricators-of-Create/create-fabric-addon-template"
+    "sources": "https://github.com/henryyuyhy/Pretty-Hitbox-Create-Addition"
   },
   "license": "MIT",
-  "icon": "assets/prettyhitbox_createaddition/icon.png",
+  "icon": "assets/prettyhitboxes_createaddition/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
 
     ],
     "client": [
-      "com.yu.prettyhitbox_createaddition.ModInitializeClient"
+      "com.yu.prettyhitboxes_createaddition.ModInitializeClient"
     ],
     "modmenu": [
-      "com.yu.prettyhitbox_createaddition.ModMenuIntegration"
+      "com.yu.prettyhitboxes_createaddition.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "prettyhitbox_createaddition.mixins.json"
+    "prettyhitboxes_createaddition.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
