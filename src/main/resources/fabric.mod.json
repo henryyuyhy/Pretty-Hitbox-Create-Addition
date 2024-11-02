@@ -31,7 +31,7 @@
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",
-    "create": "${create_version}",
+    "create": "*",
     "minecraft": "${minecraft_version}",
     "modmenu": "*"
   }
