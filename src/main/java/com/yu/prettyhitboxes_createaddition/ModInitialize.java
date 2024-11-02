@@ -6,6 +6,6 @@ public class ModInitialize implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ModInitializeClient.LOGGER.info("ModInitialize initialized");
+		//ModInitializeClient.LOGGER.info("ModInitialize initialized");
 	}
 }

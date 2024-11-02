@@ -18,7 +18,7 @@ public class ModInitializeClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		LOGGER.info("ModInitializeClient initialized");
+		//LOGGER.info("ModInitializeClient initialized");
 		AutoConfig.register(Config.class, GsonConfigSerializer::new);
 	}
 

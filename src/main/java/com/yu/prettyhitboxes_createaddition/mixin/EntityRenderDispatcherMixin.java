@@ -2,7 +2,6 @@ package com.yu.prettyhitboxes_createaddition.mixin;
 
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.yu.prettyhitboxes_createaddition.Config;
-import com.yu.prettyhitboxes_createaddition.ModInitializeClient;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
@@ -48,7 +47,7 @@ public class EntityRenderDispatcherMixin {
 	}
 
 	/**
-	 * @author ErrorGamer2000
+	 * @author ErrorGamer2000 and yu
 	 * @reason We need to completely redefine how hitboxes are drawn
 	 */
 	@Inject(at = @At("HEAD"), method = "renderHitbox(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/entity/Entity;F)V", cancellable = true)
@@ -59,18 +58,39 @@ public class EntityRenderDispatcherMixin {
 
 		Config.Color bboxColor = config.boundingBoxColor;
 		Config.Color targetColor = config.entityTargetedColor;
+		//decide whether this entity should be rendered
+		if (entity instanceof ItemEntity && !config.showItemHitboxes) {
+			ci.cancel();
+			return;
+		}
+		if (entity instanceof ItemFrameEntity && !config.showItemFrameHitboxes) {
+			ci.cancel();
+			return;
+		}
+		if (entity instanceof PaintingEntity && !config.showPaintingHitboxes) {
+			ci.cancel();
+			return;
+		}
+		if (entity instanceof BoatEntity && !config.showBoatHitboxes) {
+			ci.cancel();
+			return;
+		}
+		if (entity instanceof ThrownItemEntity && !config.showThrowableItemHitboxes) {
+			ci.cancel();
+			return;
+		}
+		if (AbstractContraptionEntity.class.isAssignableFrom(entity.getClass()) && !config.showCreateEntitiesHitboxes) {
+			ci.cancel();
+			return;
+		}
+
+		//render its hitbox and other stuffs
 		if (config.showBoundingBox) {
 			if (!(entity instanceof EnderDragonEntity)) {
 				Config.Color color = entity instanceof ItemEntity ? config.itemHitboxColor : bboxColor;
 				if (config.differentColorWhenTargeted && isTargeted(entity)) color = targetColor;
-				if ((!(entity instanceof ItemEntity) || config.showItemHitboxes)
-						&& (!(entity instanceof ThrownItemEntity) || config.showThrowableItemHitboxes)
-						&& (!(AbstractContraptionEntity.class.isAssignableFrom(entity.getClass())) || config.showCreateEntitiesHitboxes)
-						&& (!(entity instanceof BoatEntity) || config.showBoatHitboxes)
-						&& (!(entity instanceof PaintingEntity) || config.showPaintingHitboxes) || entity instanceof ItemFrameEntity && !config.showItemFrameHitboxes) {
-					WorldRenderer.drawBox(matrices, vertices, box, clampedColorValue(color.red, false), clampedColorValue(color.green, false), clampedColorValue(color.blue, false), clampedColorValue(color.alpha, true));
-				}
-			} else if (!config.hideBigDragonBox) {
+				WorldRenderer.drawBox(matrices, vertices, box, clampedColorValue(color.red, false), clampedColorValue(color.green, false), clampedColorValue(color.blue, false), clampedColorValue(color.alpha, true));
+			} else if (config.showBigDragonBox) {
 				EnderDragonPart[] parts = ((EnderDragonEntity) entity).getBodyParts();
 				int partNum = parts.length;
 
@@ -110,7 +130,9 @@ public class EntityRenderDispatcherMixin {
 		if (entity instanceof LivingEntity && config.showEyeHeight) {
 			Config.Color eyeHeightColor = config.eyeHeightColor;
 			float j = 0.01F;
-			WorldRenderer.drawBox(matrices, vertices, box.minX, (double) (entity.getStandingEyeHeight() - 0.01F), box.minZ, box.maxX, (double) (entity.getStandingEyeHeight() + 0.01F), box.maxZ, clampedColorValue(eyeHeightColor.red, false), clampedColorValue(eyeHeightColor.green, false), clampedColorValue(eyeHeightColor.blue, false), clampedColorValue(eyeHeightColor.alpha, true));
+			if (!(entity instanceof EnderDragonEntity) || config.showBigDragonBox) {
+				WorldRenderer.drawBox(matrices, vertices, box.minX, (double) (entity.getStandingEyeHeight() - 0.01F), box.minZ, box.maxX, (double) (entity.getStandingEyeHeight() + 0.01F), box.maxZ, clampedColorValue(eyeHeightColor.red, false), clampedColorValue(eyeHeightColor.green, false), clampedColorValue(eyeHeightColor.blue, false), clampedColorValue(eyeHeightColor.alpha, true));
+			}
 		}
 
 		Vec3d vec3d = entity.getRotationVec(tickDelta);
@@ -120,17 +142,13 @@ public class EntityRenderDispatcherMixin {
 
 
 
-		if ((!(entity instanceof ItemEntity) || config.showItemHitboxes)
-				&& (!(entity instanceof ThrownItemEntity) || config.showThrowableItemHitboxes)
-				&& (!(AbstractContraptionEntity.class.isAssignableFrom(entity.getClass())) || config.showCreateEntitiesHitboxes)
-				&& (!(entity instanceof BoatEntity) || config.showBoatHitboxes)
-				&& (!(entity instanceof PaintingEntity) || config.showPaintingHitboxes) || entity instanceof ItemFrameEntity && !config.showItemFrameHitboxes) {  //I spend a whole ******* day on these four lines without realizing I should be adjusting the logic on line 70
-			ModInitializeClient.LOGGER.info("rendering entity: {}", entity.getClass().getName());
+		if (config.showEntityRotationVector) {
 			Config.Color rotationVectorColor = config.entityRotationVectorColor;
-			vertices.vertex(matrix4f, 0.0F, entity.getStandingEyeHeight(), 0.0F).color(Math.min(255, Math.max(0, rotationVectorColor.red)), Math.min(255, Math.max(0, rotationVectorColor.green)), Math.min(255, Math.max(0, rotationVectorColor.blue)), Math.min(255, Math.max(0, (rotationVectorColor.alpha * 255) / 100))).normal(matrix3f, (float) vec3d.x, (float) vec3d.y, (float) vec3d.z).next();
-			vertices.vertex(matrix4f, (float) (vec3d.x * 2.0), (float) ((double) entity.getStandingEyeHeight() + vec3d.y * 2.0), (float) (vec3d.z * 2.0)).color(Math.min(255, Math.max(0, rotationVectorColor.red)), Math.min(255, Math.max(0, rotationVectorColor.green)), Math.min(255, Math.max(0, rotationVectorColor.blue)), Math.min(255, Math.max(0, (rotationVectorColor.alpha * 255) / 100))).normal(matrix3f, (float) vec3d.x, (float) vec3d.y, (float) vec3d.z).next();
-		} else {
-			ModInitializeClient.LOGGER.info("render canceled: {}", entity.getClass().getName());
+			if (!(entity instanceof EnderDragonEntity) || config.showBigDragonBox) {
+				vertices.vertex(matrix4f, 0.0F, entity.getStandingEyeHeight(), 0.0F).color(Math.min(255, Math.max(0, rotationVectorColor.red)), Math.min(255, Math.max(0, rotationVectorColor.green)), Math.min(255, Math.max(0, rotationVectorColor.blue)), Math.min(255, Math.max(0, (rotationVectorColor.alpha * 255) / 100))).normal(matrix3f, (float) vec3d.x, (float) vec3d.y, (float) vec3d.z).next();
+				vertices.vertex(matrix4f, (float) (vec3d.x * 2.0), (float) ((double) entity.getStandingEyeHeight() + vec3d.y * 2.0), (float) (vec3d.z * 2.0)).color(Math.min(255, Math.max(0, rotationVectorColor.red)), Math.min(255, Math.max(0, rotationVectorColor.green)), Math.min(255, Math.max(0, rotationVectorColor.blue)), Math.min(255, Math.max(0, (rotationVectorColor.alpha * 255) / 100))).normal(matrix3f, (float) vec3d.x, (float) vec3d.y, (float) vec3d.z).next();
+			}
+
 		}
 
 		ci.cancel();

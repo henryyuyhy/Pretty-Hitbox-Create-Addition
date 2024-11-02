@@ -11,7 +11,7 @@ public class Config implements ConfigData {
 
 	@Category("Features")
 	@Gui.Tooltip
-	public boolean hideBigDragonBox = false;
+	public boolean showBigDragonBox = true;
 	@Category("Features")
 	@Gui.Tooltip
 	public boolean showBoundingBox = true;
