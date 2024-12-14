@@ -1,6 +1,7 @@
 package com.yu.prettyhitboxes_createaddition.mixin;
 
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import com.yu.prettyhitboxes_createaddition.Config;
 
 import me.shedaniel.autoconfig.AutoConfig;
@@ -79,7 +80,11 @@ public class EntityRenderDispatcherMixin {
 			ci.cancel();
 			return;
 		}
-		if (AbstractContraptionEntity.class.isAssignableFrom(entity.getClass()) && !config.showCreateEntitiesHitboxes) {
+		if (AbstractContraptionEntity.class.isAssignableFrom(entity.getClass()) && !config.showContraptionHitboxes) {
+			ci.cancel();
+			return;
+		}
+		if (entity instanceof SeatEntity && !config.showSeatHitboxes) {
 			ci.cancel();
 			return;
 		}

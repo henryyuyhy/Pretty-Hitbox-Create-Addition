@@ -41,7 +41,10 @@ public class Config implements ConfigData {
 	public boolean showThrowableItemHitboxes = true;
 	@Category("Features")
 	@Gui.Tooltip
-	public boolean showCreateEntitiesHitboxes = true; //code added by yu
+	public boolean showContraptionHitboxes = true; //code added by yu
+	@Category("Features")
+	@Gui.Tooltip
+	public boolean showSeatHitboxes = true;
 
 
 	@Category("Colors")
