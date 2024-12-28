@@ -28,6 +28,9 @@
   "text.autoconfig.prettyhitboxes_createaddition.option.showContraptionHitboxes.@Tooltip": "Shows or hides hitboxes of Create contraptions (trains, windmills, etc.)",
   "text.autoconfig.prettyhitboxes_createaddition.option.showSeatHitboxes": "Show hitboxes for seats",
   "text.autoconfig.prettyhitboxes_createaddition.option.showSeatHitboxes.@Tooltip": "For some reason an entity appears when you sit on a seat of Create mod",
+  "text.autoconfig.prettyhitboxes_createaddition.option.showBlueprintHitboxes": "Show hitboxes for crafting blueprint",
+  "text.autoconfig.prettyhitboxes_createaddition.option.showBlueprintHitboxes.@Tooltip": "Shows or hides hitboxes for crafting blueprint",
+
   "text.autoconfig.prettyhitboxes_createaddition.option.boundingBoxColor": "Bounding Box Color",
   "text.autoconfig.prettyhitboxes_createaddition.option.boundingBoxColor.red": "Red",
   "text.autoconfig.prettyhitboxes_createaddition.option.boundingBoxColor.red.@Tooltip": "Red value of the color's RGB value. Should be a number between 0 and 255, inclusive. Smaller or large values will be clamped.",

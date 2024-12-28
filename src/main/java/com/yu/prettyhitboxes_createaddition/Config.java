@@ -45,6 +45,9 @@ public class Config implements ConfigData {
 	@Category("Features")
 	@Gui.Tooltip
 	public boolean showSeatHitboxes = true;
+	@Category("Features")
+	@Gui.Tooltip
+	public boolean showBlueprintHitboxes = true;
 
 
 	@Category("Colors")
